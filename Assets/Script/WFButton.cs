@@ -10,6 +10,16 @@ public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPoi
     public bool isHighLight;
     public Action<WFButton> onPointerEnter, onPointerExit, onPointerDown, onPointerUp, onHighLight;
     public Image image;
+    public bool isHighLightCheck;
+
+    public void Start()
+    {
+        if (isHighLightCheck)
+        {
+            StartCoroutine(HighLightUpdate());
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHighLight = true;
@@ -32,5 +42,13 @@ public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPoi
         if (onPointerUp != null)
             onPointerUp.Invoke(this);
     }
-	
+
+    IEnumerator HighLightUpdate() {
+        while (isHighLightCheck)
+        {
+            yield return null;
+            if (onHighLight != null)
+                onHighLight.Invoke(this);
+        }
+    }   
 }
