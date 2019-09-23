@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WFMaskMenu : MonoBehaviour {
-    bool isOn;
+    public bool isOn;
     public Vector3 onPos, offPos;
-    public Vector3 onSize, offSize;
+    public Vector2 onSize, offSize;
     Vector3 targetSize, targetPos;
     public WFMaskMenuSta sta;
     public RectTransform mask, content;
-    public bool isContentMoving;
-    public bool isMaskScaling;
     public bool IsOn
     {
         get
@@ -27,10 +25,7 @@ public class WFMaskMenu : MonoBehaviour {
                     targetPos = onPos;
                 else
                     targetPos = offPos;
-                if (!isContentMoving)
-                {
-                    StartCoroutine(ContentMove());
-                }
+                WFUITween.Instance.LoginMove(content, targetPos);
             }
             else
             {
@@ -38,10 +33,8 @@ public class WFMaskMenu : MonoBehaviour {
                     targetSize = onSize;
                 else
                     targetSize = offSize;
-                if (!isMaskScaling)
-                {
-                    StartCoroutine(MaskScale());
-                }
+                WFUITween.Instance.LoginSize(mask, targetSize);
+
             }
         }
     }
@@ -50,23 +43,17 @@ public class WFMaskMenu : MonoBehaviour {
     void Start () {
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-    IEnumerator MaskScale() {
-        while (true)
+    // Update is called once per frame
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            yield return null;
+            IsOn = true;
         }
-    }
-
-    IEnumerator ContentMove() {
-        while (true)
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            yield return null;
+            IsOn = false;
         }
     }
 }

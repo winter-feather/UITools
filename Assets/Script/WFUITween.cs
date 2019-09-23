@@ -2,78 +2,115 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WFUITween : SingleManager<WFUITween> {
+public class WFUITween : SingleManager<WFUITween>
+{
     Dictionary<RectTransform, Vector3> moveDic;
-    Dictionary<RectTransform, Vector3> scaleDic;
+    Dictionary<RectTransform, Vector2> sizeDic;
     Dictionary<RectTransform, Quaternion> rotDic;
-
+    List<RectTransform> moveRemoveList;
+    List<RectTransform> sizeRemoveList;
+    List<RectTransform> rotRemoveList;
     private new void Awake()
     {
         base.Awake();
         Init();
     }
 
-    void Init() {
+    void Init()
+    {
         moveDic = new Dictionary<RectTransform, Vector3>();
-        scaleDic = new Dictionary<RectTransform, Vector3>();
+        sizeDic = new Dictionary<RectTransform, Vector2>();
         rotDic = new Dictionary<RectTransform, Quaternion>();
+        moveRemoveList = new List<RectTransform>();
+        sizeRemoveList = new List<RectTransform>();
+        rotRemoveList = new List<RectTransform>();
     }
-   
-	
-	// Update is called once per frame
-	void Update () {
+
+    void Update()
+    {
         foreach (var item in moveDic)
             MoveUpdate(item.Key, item.Value);
-        foreach (var item in scaleDic)
-            ScaleUpdate(item.Key, item.Value);
+        foreach (var item in sizeDic)
+            SizeUpdate(item.Key, item.Value);
         foreach (var item in rotDic)
             RotUpdate(item.Key, item.Value);
+        AllListRemove();
     }
 
 
     void MoveUpdate(RectTransform t, Vector3 v)
     {
-        if ((t.transform.position - v).sqrMagnitude < 0.01f)
+        if ((t.anchoredPosition3D - v).sqrMagnitude < 0.01f)
         {
-            t.transform.position = v;
-            LogoutMove(t);
+            t.anchoredPosition3D = v;
+            SignLogoutMove(t);
             return;
         }
-        t.transform.position = Vector3.Lerp(t.transform.position, v, 0.05f);
+        t.anchoredPosition3D = Vector3.Lerp(t.anchoredPosition3D, v, 0.05f);
     }
 
-    void ScaleUpdate(RectTransform t, Vector3 v) {
-
+    void SizeUpdate(RectTransform t, Vector2 v)
+    {
+        if ((t.sizeDelta - v).sqrMagnitude < 2f)
+        {
+            t.sizeDelta = v;
+            SignLogoutSize(t);
+            return;
+        }
+        t.sizeDelta = Vector3.Lerp(t.sizeDelta, v, 0.05f);
     }
 
-    void RotUpdate(RectTransform t, Quaternion q) {
-
+    void RotUpdate(RectTransform t, Quaternion q)
+    {
+        if (Quaternion.Angle(t.rotation,q)<2)
+        {
+            t.rotation = q;
+            SignLogoutRot(t);
+            return;
+        }
+        t.rotation = Quaternion.Lerp(t.rotation, q, 0.05f);
     }
-
+    //-----------------------------------------------------------------------------
     public void LoginMove(RectTransform t, Vector3 v)
     {
         moveDic[t] = v;
     }
-
-    public void LogoutMove(RectTransform t)
+    public void LoginSize(RectTransform t, Vector3 v)
     {
-        moveDic.Remove(t);
+        sizeDic[t] = v;
     }
-
-    public void LoginScale(RectTransform t, Vector3 v) {
-        scaleDic[t] = v;
-    }
-
-    public void LogoutScale(RectTransform t)
+    public void LoginRot(RectTransform t, Quaternion q)
     {
-        scaleDic.Remove(t);
-    }
-
-    public void LoginRot(RectTransform t, Quaternion q) {
         rotDic[t] = q;
     }
-
-    public void LogoutRot(RectTransform t) {
-        rotDic.Remove(t);
+    public void SignLogoutMove(RectTransform t)
+    {
+        moveRemoveList.Add(t);
+    }
+    public void SignLogoutSize(RectTransform t)
+    {
+        sizeRemoveList.Add(t);
+    }
+    public void SignLogoutRot(RectTransform t)
+    {
+        rotRemoveList.Add(t);
+    }
+    public void AllListRemove()
+    {
+        for (int i = 0; i < sizeRemoveList.Count; i++)
+        {
+            sizeDic.Remove(sizeRemoveList[i]);
+        }
+        sizeRemoveList.Clear();
+        for (int i = 0; i < moveRemoveList.Count; i++)
+        {
+            moveDic.Remove(moveRemoveList[i]);
+        }
+        moveRemoveList.Clear();
+        for (int i = 0; i < rotRemoveList.Count; i++)
+        {
+            rotDic.Remove(rotRemoveList[i]);
+        }
+        rotRemoveList.Clear();
     }
 }
