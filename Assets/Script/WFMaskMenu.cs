@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WFMaskMenu : MonoBehaviour {
-    public bool isOn;
+    bool isOn;
+    public bool isMaskScale, isContentMove;
     public Vector3 onPos, offPos;
     public Vector2 onSize, offSize;
     Vector3 targetSize, targetPos;
-    public WFMaskMenuSta sta;
     public RectTransform mask, content;
     public bool IsOn
     {
@@ -19,7 +19,8 @@ public class WFMaskMenu : MonoBehaviour {
         set
         {
             isOn = value;
-            if (sta == WFMaskMenuSta.ContentMove)
+
+            if (isContentMove)
             {
                 if (isOn)
                     targetPos = onPos;
@@ -27,14 +28,13 @@ public class WFMaskMenu : MonoBehaviour {
                     targetPos = offPos;
                 WFUITween.Instance.LoginMove(content, targetPos);
             }
-            else
+            if (isMaskScale)
             {
                 if (isOn)
                     targetSize = onSize;
                 else
                     targetSize = offSize;
                 WFUITween.Instance.LoginSize(mask, targetSize);
-
             }
         }
     }
@@ -59,7 +59,3 @@ public class WFMaskMenu : MonoBehaviour {
 }
 
 
-public enum WFMaskMenuSta {
-    MaskScale,
-    ContentMove
-}
