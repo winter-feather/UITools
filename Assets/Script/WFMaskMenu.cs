@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WFMaskMenu : MonoBehaviour {
     bool isOn;
@@ -9,6 +10,7 @@ public class WFMaskMenu : MonoBehaviour {
     public Vector2 onSize, offSize;
     Vector3 targetSize, targetPos;
     public RectTransform mask, content;
+    public Image iamge;
     public bool IsOn
     {
         get
@@ -39,23 +41,17 @@ public class WFMaskMenu : MonoBehaviour {
         }
     }
 
+    private void Awake()
+    {
+       // iamge = GetComponent<Image>();
+    }
     // Use this for initialization
     void Start () {
 		
 	}
 
     // Update is called once per frame
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            IsOn = true;
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            IsOn = false;
-        }
-    }
+   
 }
 
 

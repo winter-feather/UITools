@@ -12,45 +12,25 @@ public class WFRightSlider : MonoBehaviour
     public float value;
     public RectTransform fillBackGround, fillArea;
     public bool wholeNumber;
-    private float minValue;
-    private float maxValue;
+    private float minValue = 0;
+    private float maxValue = 1;
     float distance =1;
     public WFSliderUnityEvent onValueChange;
 
-    public void SetMinValue(float v) {
-        MinValue = v;
-        RefrushDistance();
-    }
 
-    public void SetMaxValue(float v) {
-        MaxValue = v;
-        RefrushDistance();
-    }
     private void Awake()
     {
-        handle = GetComponentInChildren<WFButton>();
+        Handle = GetComponentInChildren<WFButton>();
         sliderLength = fillBackGround.sizeDelta.x;
-        handle.onPress.AddListener(HorzontalDragHandle);
-        handle.onPointerDown.AddListener(RecordMousePos);
-    }
-
-    void Start()
-    {
-        SetValue(MinValue);
+        Handle.onPress.AddListener(HorzontalDragHandle);
+        Handle.onPointerDown.AddListener(RecordMousePos);
     }
 
 
     public void RefrushDistance() {
         distance = MaxValue - MinValue;
     }
-    // Use this for initialization
- 
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+  
 
     Vector3 startMousePos;
     void RecordMousePos(WFButton button)
@@ -88,6 +68,22 @@ public class WFRightSlider : MonoBehaviour
         }
     }
 
+    public WFButton Handle
+    {
+        get
+        {
+            if (handle == null)
+            {
+                Handle = GetComponentInChildren<WFButton>();
+            }
+            return handle;
+        }
+        set
+        {
+            handle = value;
+        }
+    }
+
     void HorzontalDragHandle(WFButton button)
     {
         targetPos = Input.mousePosition - startMousePos;
@@ -95,14 +91,15 @@ public class WFRightSlider : MonoBehaviour
         targetPos.y = 0;
         SetHandlePos(targetPos.x / sliderLength * distance);
     }
+
     void SetHandlePos(float pos) {
         handelPos = pos;
         if (wholeNumber)
         {
             handelPos = Mathf.RoundToInt(handelPos);
-            targetPos.x = handelPos / distance * sliderLength;
         }
-        handle.rectT.anchoredPosition3D = targetPos;
+        targetPos.x = handelPos / distance * sliderLength;
+        Handle.rectT.anchoredPosition3D = targetPos;
         Vector2 fillsize = fillArea.sizeDelta;
         fillsize.x = sliderLength * handelPos / distance;
         fillArea.sizeDelta = fillsize;
