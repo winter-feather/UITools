@@ -12,8 +12,8 @@ public class WFRightSlider : MonoBehaviour
     public float value;
     public RectTransform fillBackGround, fillArea;
     public bool wholeNumber;
-    private float minValue = 0;
-    private float maxValue = 1;
+    public float minValue = 0;
+    public float maxValue = 1;
     float distance =1;
     public WFSliderUnityEvent onValueChange;
 
@@ -24,6 +24,7 @@ public class WFRightSlider : MonoBehaviour
         sliderLength = fillBackGround.sizeDelta.x;
         Handle.onPress.AddListener(HorzontalDragHandle);
         Handle.onPointerDown.AddListener(RecordMousePos);
+        RefrushDistance();
     }
 
 
@@ -119,7 +120,6 @@ public class WFRightSlider : MonoBehaviour
             SetHandlePos(value - MinValue);
         }
     }
-    void VerticalHandle() { }
 
 }
 

@@ -9,13 +9,19 @@ using System;
 public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPointerEnterHandler,IPointerExitHandler {
     public int id;
     public bool isHighLight, isPress;
-    public WFButtonUnityEvent onPointerEnter, onPointerExit, onPointerDown, onPointerUp, onHighLight, onPress;
     public Image image;
+    public Text text;
+    public WFButtonUnityEvent onPointerEnter, onPointerExit, onPointerDown, onPointerUp, onHighLight, onPress;
+    [HideInInspector]
     public RectTransform rectT;
+
     public void Awake()
     {
         rectT = GetComponent<RectTransform>();
-        image = GetComponent<Image>();
+        if (image == null)
+        {
+            image = GetComponent<Image>();
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
