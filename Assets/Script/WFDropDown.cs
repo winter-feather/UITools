@@ -3,29 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System;
 
 public class WFDropDown : MonoBehaviour
 {
     public WFMaskMenu mask;
     public WFButton mainButton;
     public Text mainDisplayText;
-    public Transform nodeContainer;
-    public List<string> texts;
-    public string defaultText;
+    RectTransform nodeContainer;
+
     public GameObject nodeGOPre;
-    bool isOn;
+    public float nodeHight;
+
+    public List<string> textsforStart;
+    public List<string> texts;
+    public bool isOn;
     public int seletID;
+
     public WFDropDownEvent onSetOn, onSetOff;
     public WFButtonUnityEvent onAddNode;
-    //------------------------------------tempStart
-    public Vector2 onSize, offSize;
-    public Color onColor, offColor;
-    public Color arrowOnColor, arrowOffColor;
-    public RectTransform arrow;
-    Quaternion onRot, offRot;
-    private WFDropDownEvent onSetID;
-
-    //------------------------------------tempEnd
+    public WFDropDownEvent onSetID;
 
     public bool IsOn
     {
@@ -64,13 +61,6 @@ public class WFDropDown : MonoBehaviour
         {
             onSetOn.Invoke(this);
         }
-        //------------------------------------tempStart
-        mainButton.GetComponent<Image>().raycastTarget = false;
-        WFUITween.Instance.LoginSize(mask.mask, onSize);
-        WFUITween.Instance.LoginRot(arrow, onRot);
-        WFUITween.Instance.LoginColor(mask.iamge, onColor);
-        WFUITween.Instance.LoginColor(arrow.GetComponent<Image>(), arrowOnColor);
-        //------------------------------------tempEnd
     }
 
     public void SetOff()
@@ -79,61 +69,80 @@ public class WFDropDown : MonoBehaviour
         {
             onSetOff.Invoke(this);
         }
-        //------------------------------------tempStart
-        mainButton.GetComponent<Image>().raycastTarget = true;
-        WFUITween.Instance.LoginSize(mask.mask, offSize);
-        WFUITween.Instance.LoginRot(arrow, offRot);
-        WFUITween.Instance.LoginColor(mask.iamge, offColor);
-        WFUITween.Instance.LoginColor(arrow.GetComponent<Image>(), arrowOffColor);
-        //------------------------------------tempEnd
     }
 
-
-    public void SetID(int id) {
+    public void SetID(int id)
+    {
         seletID = id;
         mainDisplayText.text = texts[seletID];
         OnSetID.Invoke(this);
-        NewUIManager.instance.RefreshCharcterIcon();
     }
 
     public void Init()
     {
-        mainButton.onPointerDown.AddListener((a) => { IsOn = true; });
+        mainButton.onPointerDown.AddListener((a) =>
+        {
+            IsOn = true;
+            mask.IsOn = true;
+        });
+
         WFButton b = mask.gameObject.AddComponent<WFButton>();
         b.onPointerExit = new WFButtonUnityEvent();
-        b.onPointerExit.AddListener((a) => { IsOn = false; });
-
-        onSize.y = offSize.y + 5; 
-        for (int i = 0; i < texts.Count; i++)
+        b.onPointerExit.AddListener((a) =>
         {
-            AddNode(texts[i],i);
+            IsOn = false;
+            mask.IsOn = false;
+        });
+
+        float high = mainButton.rectT.sizeDelta.y;
+        float width = mainButton.rectT.sizeDelta.x;
+        mask.onSize = new Vector2(width, high);
+        mask.offSize = new Vector2(width, high);
+
+        nodeContainer = mask.content;
+        VerticalLayoutGroup verticalLayoutGroup = nodeContainer.gameObject.AddComponent<VerticalLayoutGroup>();
+        verticalLayoutGroup.childForceExpandHeight = false;
+        verticalLayoutGroup.childControlHeight = false;
+
+        if (nodeGOPre == null)
+        {
+            nodeGOPre = mainButton.gameObject;
         }
+        nodeHight = nodeGOPre.GetComponent<RectTransform>().sizeDelta.y;
 
-        //------------------------------------tempStart
-        onRot = Quaternion.Euler(0, 0, 180);
-        offRot = Quaternion.identity;
-        onColor = Color.white;
-        offColor = new Color(1, 1, 1, 0);
-        //------------------------------------tempEnd
-        SetOff();
-    }
-    void AddNode(string text,int id) {
-      GameObject node = Instantiate<GameObject>(nodeGOPre, nodeContainer);
-      node.GetComponentInChildren<Text>().text = text;
-      //TODO:use nodeHigh instead 30
-      onSize.y += 30;
-      WFButton button = node.GetComponent<WFButton>();
-      button.id = id;
-      OnAddNode(button);
+        texts = new List<string>();
+
+        if (textsforStart!=null)
+        {
+            for (int i = 0; i < textsforStart.Count; i++)
+            {
+                AddNode(textsforStart[i]);
+            }
+            SetID(0);
+        }
+       
+
+        IsOn = false;
+        mask.IsOn = false;
+        
     }
 
-    void OnAddNode(WFButton button) {
-        //------------------------------------tempStart
-        button.onPointerEnter.AddListener((a) => { WFUITween.Instance.LoginColor(button.GetComponentInChildren<Text>(), new Color(0.5f, 1f,1f, 1)); });
-        button.onPointerExit.AddListener((a) => { WFUITween.Instance.LoginColor(button.GetComponentInChildren<Text>(), new Color(1,1, 1, 1)); });
-        button.onPointerDown.AddListener((a) => SetID(a.id));
-        //------------------------------------tempEnd
-        if (onAddNode!=null)
+    void AddNode(string text)
+    {
+        GameObject node = Instantiate<GameObject>(nodeGOPre, nodeContainer);
+        node.GetComponentInChildren<Text>().text = text;
+        WFButton button = node.GetComponent<WFButton>();
+        button.id = texts.Count;
+        texts.Add(text);
+        button.onPointerDown.RemoveAllListeners();
+        button.onPointerDown.AddListener((a) => { SetID(button.id); });
+        mask.onSize.y += nodeHight;
+        OnAddNode(button);
+    }
+
+    void OnAddNode(WFButton button)
+    {
+        if (onAddNode != null)
         {
             onAddNode.Invoke(button);
         }
@@ -144,15 +153,12 @@ public class WFDropDown : MonoBehaviour
         Init();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
 
+[Serializable]
 public class WFDropDownEvent : UnityEvent<WFDropDown> { }
 
-public class DropDownNode : MonoBehaviour {
+public class DropDownNode : MonoBehaviour
+{
 
 }
