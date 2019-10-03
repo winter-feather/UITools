@@ -15,7 +15,10 @@ public class WFDropDown : MonoBehaviour
     public GameObject nodeGOPre;
     public float nodeHight;
 
+<<<<<<< HEAD
     public List<string> textsforStart;
+=======
+>>>>>>> 6cb58971cea66a1a9a45f74ef6ec97d7eef25217
     public List<string> texts;
     public bool isOn;
     public int seletID;
@@ -23,6 +26,11 @@ public class WFDropDown : MonoBehaviour
     public WFDropDownEvent onSetOn, onSetOff;
     public WFButtonUnityEvent onAddNode;
     public WFDropDownEvent onSetID;
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 6cb58971cea66a1a9a45f74ef6ec97d7eef25217
 
     public bool IsOn
     {
@@ -98,6 +106,7 @@ public class WFDropDown : MonoBehaviour
         float width = mainButton.rectT.sizeDelta.x;
         mask.onSize = new Vector2(width, high);
         mask.offSize = new Vector2(width, high);
+<<<<<<< HEAD
 
         nodeContainer = mask.content;
         VerticalLayoutGroup verticalLayoutGroup = nodeContainer.gameObject.AddComponent<VerticalLayoutGroup>();
@@ -119,24 +128,57 @@ public class WFDropDown : MonoBehaviour
                 AddNode(textsforStart[i]);
             }
             SetID(0);
+=======
+
+        nodeContainer = mask.content;
+        VerticalLayoutGroup verticalLayoutGroup = nodeContainer.gameObject.AddComponent<VerticalLayoutGroup>();
+        verticalLayoutGroup.childForceExpandHeight = false;
+        verticalLayoutGroup.childControlHeight = false;
+
+        if (nodeGOPre == null)
+        {
+            nodeGOPre = mainButton.gameObject;
+        }
+        nodeHight = nodeGOPre.GetComponent<RectTransform>().sizeDelta.y;
+
+        for (int i = 0; i < texts.Count; i++)
+        {
+            AddNode(texts[i], i);
+>>>>>>> 6cb58971cea66a1a9a45f74ef6ec97d7eef25217
         }
        
 
         IsOn = false;
         mask.IsOn = false;
+<<<<<<< HEAD
         
     }
 
     void AddNode(string text)
+=======
+
+        SetID(0);
+    }
+
+    void AddNode(string text, int id)
+>>>>>>> 6cb58971cea66a1a9a45f74ef6ec97d7eef25217
     {
         GameObject node = Instantiate<GameObject>(nodeGOPre, nodeContainer);
         node.GetComponentInChildren<Text>().text = text;
         WFButton button = node.GetComponent<WFButton>();
+<<<<<<< HEAD
         button.id = texts.Count;
         texts.Add(text);
         button.onPointerDown.RemoveAllListeners();
         button.onPointerDown.AddListener((a) => { SetID(button.id); });
         mask.onSize.y += nodeHight;
+=======
+        //button.text.text = text;
+        button.onPointerDown.RemoveAllListeners();
+        button.onPointerDown.AddListener((a) => { SetID(button.id); });
+        mask.onSize.y += nodeHight;
+        button.id = id;
+>>>>>>> 6cb58971cea66a1a9a45f74ef6ec97d7eef25217
         OnAddNode(button);
     }
 
