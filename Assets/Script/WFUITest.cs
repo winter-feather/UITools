@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WFUITest : MonoBehaviour {
 
-    public void SliderValue(WFRightSlider slider)
+    public void SliderValue(WFSlider slider)
     {
         Debug.Log(slider.value);
     }
