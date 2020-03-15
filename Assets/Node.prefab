@@ -75,31 +75,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  isHighLight: 0
   isPress: 0
   image: {fileID: 114837217744703100}
   text: {fileID: 114915853563628190}
-  onPointerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: WFButtonUnityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  onPointerExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: WFButtonUnityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
   onPointerDown:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: WFButtonUnityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   onPointerUp:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: WFButtonUnityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  onHighLight:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: WFButtonUnityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -226,7 +210,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 958.6, y: -332}
-  m_SizeDelta: {x: 150, y: 35}
+  m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224539929261927092
 RectTransform:

@@ -86,13 +86,18 @@ public class WFDropDown : MonoBehaviour
             mask.IsOn = true;
         });
 
-        WFButton b = mask.gameObject.AddComponent<WFButton>();
-        b.onPointerExit = new WFButtonUnityEvent();
-        b.onPointerExit.AddListener((a) =>
+        WFHighLighter b = mask.gameObject.AddComponent<WFHighLighter>();
+        b.onHighLightOff = new UnityEvent();
+        b.onHighLightOff.AddListener(() =>
         {
             IsOn = false;
             mask.IsOn = false;
         });
+        //b.onPointerExit.AddListener((a) =>
+        //{
+        //    IsOn = false;
+        //    mask.IsOn = false;
+        //});
 
         float high = mainButton.rectT.sizeDelta.y;
         float width = mainButton.rectT.sizeDelta.x;
@@ -147,6 +152,23 @@ public class WFDropDown : MonoBehaviour
             onAddNode.Invoke(button);
         }
     }
+
+    void ResetID() { 
+    
+    }
+
+    void RemoveNode(int id) { 
+    
+    }
+
+    void RemoveNode(string str) { 
+    
+    }
+
+    void RemoveAll() { 
+    
+    }
+
 
     void Start()
     {

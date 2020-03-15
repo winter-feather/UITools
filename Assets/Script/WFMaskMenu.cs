@@ -10,6 +10,16 @@ public class WFMaskMenu : MonoBehaviour {
     public Vector2 onSize, offSize;
     Vector3 targetSize, targetPos;
     public RectTransform mask, content;
+    public bool isStartClose;
+
+
+    public void Start() {
+        Debug.Log("start");
+        if (isStartClose)
+        {
+            IsOn = false;
+        }
+    }
     public bool IsOn
     {
         get

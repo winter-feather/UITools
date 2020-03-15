@@ -28,6 +28,7 @@ public class WFSlider : MonoBehaviour
         RefrushDistance();
         InitOrientation();
 
+
     }
 
     void InitOrientation() {
@@ -178,6 +179,9 @@ public class WFSlider : MonoBehaviour
         }
     }
 
+    public void Start() { 
+        SetValue(50);
+    }
 }
 
 public enum SliderOrientation {

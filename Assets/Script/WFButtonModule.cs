@@ -8,6 +8,7 @@ public class WFButtonModule : MonoBehaviour
     public Image image;
     public Text text;
 
+    
     public List<Sprite> sprites;
     public List<Color> colors;
     // Use this for initialization

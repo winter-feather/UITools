@@ -6,15 +6,14 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPointerEnterHandler,IPointerExitHandler {
+public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler{
     public int id;
-    public bool isHighLight, isPress;
+    public bool isPress;
     public Image image;
     public Text text;
-    public WFButtonUnityEvent onPointerEnter, onPointerExit, onPointerDown, onPointerUp, onHighLight, onPress;
+    public WFButtonUnityEvent onPointerDown, onPointerUp, onPress;
     [HideInInspector]
     public RectTransform rectT;
-
     public void Awake()
     {
         rectT = GetComponent<RectTransform>();
@@ -24,19 +23,20 @@ public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPoi
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        isHighLight = true;
-        StartCoroutine(HighLightUpdate());
-        if (onPointerEnter != null)
-            onPointerEnter.Invoke(this);
-    }
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        isHighLight = false;
-        if (onPointerExit != null)
-            onPointerExit.Invoke(this);
-    }
+    //public void OnPointerEnter(PointerEventData eventData)
+    //{
+    //    isHighLight = true;
+    //    StartCoroutine(HighLightUpdate());
+    //    if (onPointerEnter != null)
+    //        onPointerEnter.Invoke(this);
+    //}
+    //public void OnPointerExit(PointerEventData eventData)
+    //{
+    //    isHighLight = false;
+    //    if (onPointerExit != null)
+    //        onPointerExit.Invoke(this);
+    //}
+
     public void OnPointerDown(PointerEventData eventData)
     {
         isPress = true;
@@ -49,14 +49,6 @@ public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPoi
         isPress = false;
         if (onPointerUp != null)
             onPointerUp.Invoke(this);
-    }
-    IEnumerator HighLightUpdate() {
-        while (isHighLight)
-        {
-            yield return null;
-            if (onHighLight != null)
-                onHighLight.Invoke(this);
-        }
     }
 
     IEnumerator PressUpdate() {
@@ -71,3 +63,5 @@ public class WFButton : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPoi
 
 [Serializable]
 public class WFButtonUnityEvent : UnityEvent<WFButton> { }
+[Serializable]
+public class WFHightLightEvent : UnityEvent<WFHighLighter> { }
